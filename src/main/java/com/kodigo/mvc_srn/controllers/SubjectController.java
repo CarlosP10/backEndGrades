@@ -1,12 +1,13 @@
 package com.kodigo.mvc_srn.controllers;
 
+import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Subject;
 import com.kodigo.mvc_srn.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResourceAccessException;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,15 +32,15 @@ public class SubjectController {
      *
      * @param subjectId the subject id
      * @return the subject by id
-     * @throws ResourceAccessException the resource not found exception
+     * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/subject/{id}")
     public ResponseEntity<Subject> getSubjectsById(@PathVariable(value = "id") Long subjectId)
-            throws ResourceAccessException {
+            throws ResourceNotFoundException {
         Subject subject =
                 subjectRepository
                         .findById(subjectId)
-                        .orElseThrow(() -> new ResourceAccessException(notFound + subjectId));
+                        .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
         return ResponseEntity.ok().body(subject);
     }
 
@@ -53,14 +54,14 @@ public class SubjectController {
      * Update subject entity
      * @param subjectId the subject id
      * @return the response entity
-     * @throws ResourceAccessException the resource not found exception
+     * @throws ResourceNotFoundException the resource not found exception
      */
     @PutMapping("/subject/{id}")
     public ResponseEntity<Subject> updateSubject(
             @PathVariable(value = "id") Long subjectId, @Validated @RequestBody Subject subject)
-        throws ResourceAccessException {
+        throws ResourceNotFoundException {
         Subject subject1 = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new ResourceAccessException(notFound + subjectId));
+                .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
 
         subject1.setTeacherId(subject.getTeacherId());
         subject1.setStudentId(subject.getStudentId());
@@ -77,11 +78,11 @@ public class SubjectController {
      * @return the map
      */
     @DeleteMapping("/subject/{id}")
-    public Map<String, Boolean> deleteSubject(@PathVariable(value = "id") Long subjectId) {
+    public Map<String, Boolean> deleteSubject(@PathVariable(value = "id") Long subjectId) throws Exception {
         Subject subject =
                 subjectRepository
                         .findById(subjectId)
-                        .orElseThrow(() -> new ResourceAccessException(notFound + subjectId));
+                        .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
 
         subjectRepository.delete(subject);
         Map<String, Boolean> response = new HashMap<>();

@@ -1,12 +1,13 @@
 package com.kodigo.mvc_srn.controllers;
 
+import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Teacher;
 import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResourceAccessException;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,15 +32,15 @@ public class TeacherController {
      *
      * @param teacherId the teacher id
      * @return the teacher by id
-     * @throws ResourceAccessException the resource not found exception
+     * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/teacher/{id}")
     public ResponseEntity<Teacher> getTeachersById(@PathVariable(value = "id") Long teacherId)
-            throws ResourceAccessException {
+            throws ResourceNotFoundException {
         Teacher teacher =
                 teacherRepository
                         .findById(teacherId)
-                        .orElseThrow(() -> new ResourceAccessException(notFound + teacherId));
+                        .orElseThrow(() -> new ResourceNotFoundException(notFound + teacherId));
         return ResponseEntity.ok().body(teacher);
     }
 
@@ -53,14 +54,14 @@ public class TeacherController {
      * Update teacher entity
      * @param teacherId the teacher id
      * @return the response entity
-     * @throws ResourceAccessException the resource not found exception
+     * @throws ResourceNotFoundException the resource not found exception
      */
     @PutMapping("/teacher/{id}")
     public ResponseEntity<Teacher> updateTeacher(
             @PathVariable(value = "id") Long teacherId, @Validated @RequestBody Teacher teacher)
-        throws ResourceAccessException {
+        throws ResourceNotFoundException {
         Teacher teacher1 = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new ResourceAccessException(notFound + teacherId));
+                .orElseThrow(() -> new ResourceNotFoundException(notFound + teacherId));
 
         teacher1.setInstitutionId(teacher.getInstitutionId());
         teacher1.setNameTeacher(teacher.getNameTeacher());
@@ -75,11 +76,11 @@ public class TeacherController {
      * @return the map
      */
     @DeleteMapping("/teacher/{id}")
-    public Map<String, Boolean> deleteTeacher(@PathVariable(value = "id") Long teacherId) {
+    public Map<String, Boolean> deleteTeacher(@PathVariable(value = "id") Long teacherId) throws Exception {
         Teacher teacher =
                 teacherRepository
                         .findById(teacherId)
-                        .orElseThrow(() -> new ResourceAccessException(notFound + teacherId));
+                        .orElseThrow(() -> new ResourceNotFoundException(notFound + teacherId));
 
         teacherRepository.delete(teacher);
         Map<String, Boolean> response = new HashMap<>();
