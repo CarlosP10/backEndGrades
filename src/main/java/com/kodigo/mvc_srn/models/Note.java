@@ -1,9 +1,6 @@
 package com.kodigo.mvc_srn.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,11 +8,13 @@ import javax.persistence.*;
 @Table(name = "Note")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, nullable = false)
     private long idNotes;
 
     @Column(name = "subject_id", nullable = false)
