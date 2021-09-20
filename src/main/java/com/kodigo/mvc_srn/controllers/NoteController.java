@@ -1,0 +1,90 @@
+package com.kodigo.mvc_srn.controllers;
+
+import com.kodigo.mvc_srn.models.Note;
+import com.kodigo.mvc_srn.repository.NoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/v1")
+public class NoteController {
+    @Autowired
+    private NoteRepository noteRepository;
+
+    String notFound = "Note not found on :: ";
+
+    //Get all notes
+    @GetMapping("/notes")
+    public List<Note> getAllNotes() {
+        return noteRepository.findAll();
+    }
+
+    /**
+     * Gets notes by id.
+     *
+     * @param noteId the note id
+     * @return the note by id
+     * @throws ResourceAccessException the resource not found exception
+     */
+    @GetMapping("/note/{id}")
+    public ResponseEntity<Note> getNotesById(@PathVariable(value = "id") Long noteId)
+            throws ResourceAccessException {
+        Note note =
+                noteRepository
+                        .findById(noteId)
+                        .orElseThrow(() -> new ResourceAccessException(notFound + noteId));
+        return ResponseEntity.ok().body(note);
+    }
+
+    //Post new notes
+    @PostMapping("/note")
+    public Note createNote(@Validated @RequestBody Note note){
+        return noteRepository.save(note);
+    }
+
+    /**
+     * Update note entity
+     * @param noteId the note id
+     * @return the response entity
+     * @throws ResourceAccessException the resource not found exception
+     */
+    @PutMapping("/note/{id}")
+    public ResponseEntity<Note> updateNote(
+            @PathVariable(value = "id") Long noteId, @Validated @RequestBody Note note)
+        throws ResourceAccessException {
+        Note note1 = noteRepository.findById(noteId)
+                .orElseThrow(() -> new ResourceAccessException(notFound + noteId));
+
+        note1.setSubjectId(note.getSubjectId());
+        note1.setNoteName(note.getNoteName());
+        note1.setNoteDouble(note.getNoteDouble());
+        final Note updateNote = noteRepository.save(note1);
+        return ResponseEntity.ok(updateNote);
+    }
+
+    /**
+     * Delete note map.
+     *
+     * @param noteId the note id
+     * @return the map
+     */
+    @DeleteMapping("/note/{id}")
+    public Map<String, Boolean> deleteNote(@PathVariable(value = "id") Long noteId) {
+        Note note =
+                noteRepository
+                        .findById(noteId)
+                        .orElseThrow(() -> new ResourceAccessException(notFound + noteId));
+
+        noteRepository.delete(note);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
+}
