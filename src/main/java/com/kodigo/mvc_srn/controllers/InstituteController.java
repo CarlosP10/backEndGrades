@@ -22,7 +22,7 @@ public class InstituteController {
     String notFound = "Institute not found on :: ";
 
     //Get all institutes
-    @GetMapping("/institutes")
+    @GetMapping("/all")
     public List<Institute> getAllInstitutes() {
         return instituteRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class InstituteController {
      * @return the institute by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/institute/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Institute> getInstitutesById(@PathVariable(value = "id") Long instituteId)
             throws ResourceNotFoundException {
         Institute institute =
@@ -45,7 +45,7 @@ public class InstituteController {
     }
 
     //Post new institutes
-    @PostMapping("/institute")
+    @PostMapping("/")
     public Institute createInstitute(@Validated @RequestBody Institute institute){
         return instituteRepository.save(institute);
     }
@@ -56,7 +56,7 @@ public class InstituteController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/institute/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Institute> updateInstitute(
             @PathVariable(value = "id") Long instituteId, @Validated @RequestBody Institute institute)
         throws ResourceNotFoundException {
@@ -74,7 +74,7 @@ public class InstituteController {
      * @param instituteId the institute id
      * @return the map
      */
-    @DeleteMapping("/institute/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteInstitute(@PathVariable(value = "id") Long instituteId) throws Exception {
         Institute institute =
                 instituteRepository

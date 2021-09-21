@@ -22,7 +22,7 @@ public class DegreeController {
     String notFound = "Degree not found on :: ";
 
     //Get all degrees
-    @GetMapping("/degrees")
+    @GetMapping("/all")
     public List<Degree> getAllDegrees() {
         return degreeRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class DegreeController {
      * @return the degree by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/degree/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Degree> getDegreesById(@PathVariable(value = "id") Long degreeId)
             throws ResourceNotFoundException {
         Degree degree =
@@ -45,7 +45,7 @@ public class DegreeController {
     }
 
     //Post new degrees
-    @PostMapping("/degree")
+    @PostMapping("/")
     public Degree createDegree(@Validated @RequestBody Degree degree){
         return degreeRepository.save(degree);
     }
@@ -56,7 +56,7 @@ public class DegreeController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/degree/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Degree> updateDegree(
             @PathVariable(value = "id") Long degreeId, @Validated @RequestBody Degree degree)
         throws ResourceNotFoundException {
@@ -77,7 +77,7 @@ public class DegreeController {
      * @param degreeId the degree id
      * @return the map
      */
-    @DeleteMapping("/degree/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteDegree(@PathVariable(value = "id") Long degreeId) throws Exception {
         Degree degree =
                 degreeRepository

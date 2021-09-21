@@ -22,7 +22,7 @@ public class NoteController {
     String notFound = "Note not found on :: ";
 
     //Get all notes
-    @GetMapping("/notes")
+    @GetMapping("/all")
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class NoteController {
      * @return the note by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/note/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Note> getNotesById(@PathVariable(value = "id") Long noteId)
             throws ResourceNotFoundException {
         Note note =
@@ -45,7 +45,7 @@ public class NoteController {
     }
 
     //Post new notes
-    @PostMapping("/note")
+    @PostMapping("/")
     public Note createNote(@Validated @RequestBody Note note){
         return noteRepository.save(note);
     }
@@ -56,7 +56,7 @@ public class NoteController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/note/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(
             @PathVariable(value = "id") Long noteId, @Validated @RequestBody Note note)
         throws ResourceNotFoundException {
@@ -76,7 +76,7 @@ public class NoteController {
      * @param noteId the note id
      * @return the map
      */
-    @DeleteMapping("/note/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteNote(@PathVariable(value = "id") Long noteId) throws Exception {
         Note note =
                 noteRepository

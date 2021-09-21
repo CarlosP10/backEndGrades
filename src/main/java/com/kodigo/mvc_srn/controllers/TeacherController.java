@@ -22,7 +22,7 @@ public class TeacherController {
     String notFound = "Teacher not found on :: ";
 
     //Get all teachers
-    @GetMapping("/teachers")
+    @GetMapping("/all")
     public List<Teacher> getAllTeachers() {
         return teacherRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class TeacherController {
      * @return the teacher by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/teacher/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Teacher> getTeachersById(@PathVariable(value = "id") Long teacherId)
             throws ResourceNotFoundException {
         Teacher teacher =
@@ -45,7 +45,7 @@ public class TeacherController {
     }
 
     //Post new teachers
-    @PostMapping("/teacher")
+    @PostMapping("/")
     public Teacher createTeacher(@Validated @RequestBody Teacher teacher){
         return teacherRepository.save(teacher);
     }
@@ -56,7 +56,7 @@ public class TeacherController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/teacher/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Teacher> updateTeacher(
             @PathVariable(value = "id") Long teacherId, @Validated @RequestBody Teacher teacher)
         throws ResourceNotFoundException {
@@ -75,7 +75,7 @@ public class TeacherController {
      * @param teacherId the teacher id
      * @return the map
      */
-    @DeleteMapping("/teacher/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteTeacher(@PathVariable(value = "id") Long teacherId) throws Exception {
         Teacher teacher =
                 teacherRepository

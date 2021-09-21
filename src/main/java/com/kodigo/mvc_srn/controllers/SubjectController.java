@@ -22,7 +22,7 @@ public class SubjectController {
     String notFound = "Subject not found on :: ";
 
     //Get all subjects
-    @GetMapping("/subjects")
+    @GetMapping("/all")
     public List<Subject> getAllSubjects() {
         return subjectRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class SubjectController {
      * @return the subject by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/subject/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Subject> getSubjectsById(@PathVariable(value = "id") Long subjectId)
             throws ResourceNotFoundException {
         Subject subject =
@@ -45,7 +45,7 @@ public class SubjectController {
     }
 
     //Post new subjects
-    @PostMapping("/subject")
+    @PostMapping("/")
     public Subject createSubject(@Validated @RequestBody Subject subject){
         return subjectRepository.save(subject);
     }
@@ -56,7 +56,7 @@ public class SubjectController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/subject/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Subject> updateSubject(
             @PathVariable(value = "id") Long subjectId, @Validated @RequestBody Subject subject)
         throws ResourceNotFoundException {
@@ -77,7 +77,7 @@ public class SubjectController {
      * @param subjectId the subject id
      * @return the map
      */
-    @DeleteMapping("/subject/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteSubject(@PathVariable(value = "id") Long subjectId) throws Exception {
         Subject subject =
                 subjectRepository

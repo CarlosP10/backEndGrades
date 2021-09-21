@@ -22,7 +22,7 @@ public class StudentController {
     String notFound = "Student not found on :: ";
 
     //Get all students
-    @GetMapping("/students")
+    @GetMapping("/all")
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
@@ -34,7 +34,7 @@ public class StudentController {
      * @return the student by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/student/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentsById(@PathVariable(value = "id") Long studentId)
             throws ResourceNotFoundException {
         Student student =
@@ -45,7 +45,7 @@ public class StudentController {
     }
 
     //Post new students
-    @PostMapping("/student")
+    @PostMapping("/")
     public Student createStudent(@Validated @RequestBody Student student){
         return studentRepository.save(student);
     }
@@ -56,7 +56,7 @@ public class StudentController {
      * @return the response entity
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @PutMapping("/student/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(
             @PathVariable(value = "id") Long studentId, @Validated @RequestBody Student student)
         throws ResourceNotFoundException {
@@ -77,7 +77,7 @@ public class StudentController {
      * @param studentId the student id
      * @return the map
      */
-    @DeleteMapping("/student/{id}")
+    @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteStudent(@PathVariable(value = "id") Long studentId) throws Exception {
         Student student =
                 studentRepository
