@@ -4,12 +4,17 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Institution")
+@Entity(name = "Institution")
+@Table
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @Builder
 public class Institute {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "institute_sequence",
+            sequenceName = "institute_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "institute_sequence")
     @Column(updatable = false, nullable = false)
     private long id;
 

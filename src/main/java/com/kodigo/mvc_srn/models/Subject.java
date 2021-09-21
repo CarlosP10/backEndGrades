@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Subject")
+@Entity(name = "Subject")
+@Table
 @Getter
 @Setter
 @Builder
@@ -13,7 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "subject_sequence",
+            sequenceName = "subject_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_sequence")
     @Column(updatable = false, nullable = false)
     private long idSubject;
 

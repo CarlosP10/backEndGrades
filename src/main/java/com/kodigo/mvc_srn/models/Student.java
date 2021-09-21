@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Student")
+@Entity(name = "Student")
+@Table
 @Getter
 @Setter
 @Builder
@@ -13,7 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     @Column(updatable = false, nullable = false)
     private long id;
 

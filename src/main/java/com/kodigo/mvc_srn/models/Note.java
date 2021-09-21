@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Note")
+@Entity(name = "Note")
+@Table
 @Getter
 @Setter
 @Builder
@@ -13,7 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Note {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "note_sequence",
+            sequenceName = "note_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "note_sequence")
     @Column(updatable = false, nullable = false)
     private long idNotes;
 

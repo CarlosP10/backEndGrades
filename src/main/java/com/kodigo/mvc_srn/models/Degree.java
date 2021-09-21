@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Degree")
+@Entity(name = "Degree")
+@Table
 @Getter
 @Setter
 @Builder
@@ -13,7 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Degree {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "degree_sequence",
+            sequenceName = "degree_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "degree_sequence")
     @Column(updatable = false, nullable = false)
     private long idDegree;
 
