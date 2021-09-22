@@ -63,7 +63,6 @@ public class NoteController {
         Note note1 = noteRepository.findById(noteId)
                 .orElseThrow(() -> new ResourceNotFoundException(notFound + noteId));
 
-        note1.setSubjectId(note.getSubjectId());
         note1.setNoteName(note.getNoteName());
         note1.setNoteDouble(note.getNoteDouble());
         final Note updateNote = noteRepository.save(note1);

@@ -1,7 +1,10 @@
 package com.kodigo.mvc_srn.controllers;
 
 import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
+import com.kodigo.mvc_srn.models.Institute;
 import com.kodigo.mvc_srn.models.Teacher;
+import com.kodigo.mvc_srn.models.Teacher;
+import com.kodigo.mvc_srn.repository.InstituteRepository;
 import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,9 @@ import java.util.Map;
 public class TeacherController {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private InstituteRepository instituteRepository;
 
     String notFound = "Teacher not found on :: ";
 
@@ -63,10 +69,21 @@ public class TeacherController {
         Teacher teacher1 = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new ResourceNotFoundException(notFound + teacherId));
 
-        teacher1.setInstitutionId(teacher.getInstitutionId());
         teacher1.setNameTeacher(teacher.getNameTeacher());
         final Teacher updateTeacher = teacherRepository.save(teacher1);
         return ResponseEntity.ok(updateTeacher);
+    }
+
+    @PutMapping("/{teacherId}/institute/{instituteId}")
+    public ResponseEntity<Teacher> addStudentToInstitute(
+            @PathVariable Long teacherId,
+            @PathVariable Long instituteId
+    ){
+        Teacher teacher = teacherRepository.findById(teacherId).get();
+        Institute institute = instituteRepository.findById(instituteId).get();
+        teacher.setInstitute(institute);
+        final Teacher updateStudent = teacherRepository.save(teacher);
+        return ResponseEntity.ok(updateStudent);
     }
 
     /**

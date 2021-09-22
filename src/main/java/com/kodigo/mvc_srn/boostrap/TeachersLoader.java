@@ -22,13 +22,11 @@ public class TeachersLoader implements CommandLineRunner {
         if (teacherRepository.count() == 0) {
             teacherRepository.save(
                     Teacher.builder()
-                            .institutionId(1)
                             .nameTeacher("Juan Jose Ramos")
                             .build()
             );
             teacherRepository.save(
                     Teacher.builder()
-                            .institutionId(1)
                             .nameTeacher("Ernesto De La Cruz")
                             .build()
             );

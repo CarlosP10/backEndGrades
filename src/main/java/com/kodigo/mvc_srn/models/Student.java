@@ -1,8 +1,11 @@
 package com.kodigo.mvc_srn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "Student")
 @Table
@@ -22,8 +25,21 @@ public class Student {
     @Column(updatable = false, nullable = false)
     private long id;
 
-    @Column(name = "institution_id", nullable = false)
-    private long institutionId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "institute_id", referencedColumnName = "id")
+    private Institute institute;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "degree_id", referencedColumnName = "id")
+    private Degree degree;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "enrolledStudents")
+    private Set<Subject> subjects = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "enrolledStudentsQuiz")
+    private Set<Quiz> quizzes = new HashSet<>();
 
     @Column(name = "name_student", nullable = false)
     private String nameStudent;

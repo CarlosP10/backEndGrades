@@ -1,8 +1,12 @@
 package com.kodigo.mvc_srn.controllers;
 
 import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
+import com.kodigo.mvc_srn.models.*;
 import com.kodigo.mvc_srn.models.Subject;
+import com.kodigo.mvc_srn.repository.NoteRepository;
+import com.kodigo.mvc_srn.repository.StudentRepository;
 import com.kodigo.mvc_srn.repository.SubjectRepository;
+import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +23,15 @@ public class SubjectController {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private NoteRepository noteRepository;
+
     String notFound = "Subject not found on :: ";
 
     //Get all subjects
@@ -27,13 +40,6 @@ public class SubjectController {
         return subjectRepository.findAll();
     }
 
-    /**
-     * Gets subjects by id.
-     *
-     * @param subjectId the subject id
-     * @return the subject by id
-     * @throws ResourceNotFoundException the resource not found exception
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Subject> getSubjectsById(@PathVariable(value = "id") Long subjectId)
             throws ResourceNotFoundException {
@@ -46,37 +52,57 @@ public class SubjectController {
 
     //Post new subjects
     @PostMapping("/")
-    public Subject createSubject(@Validated @RequestBody Subject subject){
+    public Subject createSubject(@RequestBody Subject subject){
         return subjectRepository.save(subject);
     }
 
-    /**
-     * Update subject entity
-     * @param subjectId the subject id
-     * @return the response entity
-     * @throws ResourceNotFoundException the resource not found exception
-     */
+    @PutMapping("/{subjectId}/students/{studentId}")
+    public ResponseEntity<Subject> addStudentToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long studentId
+    ){
+        Subject subject = subjectRepository.findById(subjectId).get();
+        Student student = studentRepository.findById(studentId).get();
+        subject.enrolledStudents.add(student);
+        final Subject updateSubject = subjectRepository.save(subject);
+        return ResponseEntity.ok(updateSubject);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Subject> updateSubject(
-            @PathVariable(value = "id") Long subjectId, @Validated @RequestBody Subject subject)
-        throws ResourceNotFoundException {
-        Subject subject1 = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
-
-        subject1.setTeacherId(subject.getTeacherId());
-        subject1.setStudentId(subject.getStudentId());
+            @PathVariable Long id, @RequestBody Subject subject
+    )throws ResourceNotFoundException {
+        Subject subject1 = subjectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(notFound + id));
         subject1.setNameSubject(subject.getNameSubject());
-        subject1.setNameDate(subject.getNameDate());
         final Subject updateSubject = subjectRepository.save(subject1);
         return ResponseEntity.ok(updateSubject);
     }
 
-    /**
-     * Delete subject map.
-     *
-     * @param subjectId the subject id
-     * @return the map
-     */
+    @PutMapping("/{subjectId}/teacher/{teacherId}")
+    public ResponseEntity<Subject> assignTeacherToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long teacherId
+    ){
+        Subject subject = subjectRepository.findById(subjectId).get();
+        Teacher teacher = teacherRepository.findById(teacherId).get();
+        subject.setTeacher(teacher);
+        final Subject updateSubject = subjectRepository.save(subject);
+        return ResponseEntity.ok(updateSubject);
+    }
+
+    @PutMapping("/{subjectId}/note/{noteId}")
+    public ResponseEntity<Subject> assignNoteToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long noteId
+    ){
+        Subject subject = subjectRepository.findById(subjectId).get();
+        Note note = noteRepository.findById(noteId).get();
+        subject.setNote(note);
+        final Subject updateSubject = subjectRepository.save(subject);
+        return ResponseEntity.ok(updateSubject);
+    }
+
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteSubject(@PathVariable(value = "id") Long subjectId) throws Exception {
         Subject subject =

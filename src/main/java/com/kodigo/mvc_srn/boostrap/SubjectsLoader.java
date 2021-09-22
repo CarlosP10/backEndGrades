@@ -22,26 +22,17 @@ public class SubjectsLoader implements CommandLineRunner {
         if (subjectRepository.count() == 0) {
             subjectRepository.save(
                     Subject.builder()
-                            .teacherId(1)
-                            .studentId(1)
                             .nameSubject("Sociales")
-                            .nameDate("02/02/2021")
                             .build()
             );
             subjectRepository.save(
                     Subject.builder()
-                            .teacherId(1)
-                            .studentId(2)
                             .nameSubject("Sociales")
-                            .nameDate("02/02/2021")
                             .build()
             );
             subjectRepository.save(
                     Subject.builder()
-                            .teacherId(1)
-                            .studentId(3)
                             .nameSubject("Sociales")
-                            .nameDate("02/02/2021")
                             .build()
             );
             System.out.println("Ejemplos Subject cargados");

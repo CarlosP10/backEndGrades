@@ -22,21 +22,18 @@ public class NotesLoader implements CommandLineRunner {
         if (notesRepository.count() == 0) {
             notesRepository.save(
                     Note.builder()
-                            .subjectId(2)
                             .noteName("Primer examen")
                             .noteDouble(7.6)
                             .build()
             );
             notesRepository.save(
                     Note.builder()
-                            .subjectId(2)
                             .noteName("Segundo examen")
                             .noteDouble(8.6)
                             .build()
             );
             notesRepository.save(
                     Note.builder()
-                            .subjectId(2)
                             .noteName("Tercer examen")
                             .noteDouble(9.6)
                             .build()

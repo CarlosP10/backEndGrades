@@ -1,8 +1,10 @@
 package com.kodigo.mvc_srn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "Note")
 @Table
@@ -20,13 +22,18 @@ public class Note {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "note_sequence")
     @Column(updatable = false, nullable = false)
-    private long idNotes;
+    private long id;
 
-    @Column(name = "subject_id", nullable = false)
-    private long subjectId;
+    @JsonIgnore
+    @OneToMany(mappedBy = "note")
+    private Set<Subject> subjects;
 
     @Column(name = "note_name", nullable = false)
     private String noteName;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "note")
+    private Set<Quiz> quizzes;
 
     @Column(name = "note", nullable = false)
     private double noteDouble;

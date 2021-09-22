@@ -22,7 +22,6 @@ public class StudentsLoader implements CommandLineRunner {
         if (studentRepository.count() == 0) {
             studentRepository.save(
                     Student.builder()
-                            .institutionId(1)
                             .nameStudent("Carlos")
                             .lastnameStudent("Paredes")
                             .birthdate("19/03/1998")
@@ -30,7 +29,6 @@ public class StudentsLoader implements CommandLineRunner {
             );
             studentRepository.save(
                     Student.builder()
-                            .institutionId(1)
                             .nameStudent("Daniela")
                             .lastnameStudent("Lopez")
                             .birthdate("06/06/1998")
@@ -38,7 +36,6 @@ public class StudentsLoader implements CommandLineRunner {
             );
             studentRepository.save(
                     Student.builder()
-                            .institutionId(1)
                             .nameStudent("Julio")
                             .lastnameStudent("Giron")
                             .birthdate("26/08/1999")

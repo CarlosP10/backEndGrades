@@ -1,8 +1,10 @@
 package com.kodigo.mvc_srn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "Degree")
 @Table
@@ -20,16 +22,15 @@ public class Degree {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "degree_sequence")
     @Column(updatable = false, nullable = false)
-    private long idDegree;
+    private long id;
 
-    @Column(name = "teacher_id", nullable = false)
-    private long teacherId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private Teacher teacher;
 
-    @Column(name = "student_id", nullable = false)
-    private long studentId;
-
-    @Column(name = "subject_id", nullable = false)
-    private long subjectId;
+    @JsonIgnore
+    @OneToMany(mappedBy = "degree")
+    private Set<Student> students;
 
     @Column(name = "degree_name", nullable = false)
     private String nameDegree;

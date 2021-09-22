@@ -2,7 +2,10 @@ package com.kodigo.mvc_srn.controllers;
 
 import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Degree;
+import com.kodigo.mvc_srn.models.Teacher;
+import com.kodigo.mvc_srn.models.Degree;
 import com.kodigo.mvc_srn.repository.DegreeRepository;
+import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +22,9 @@ public class DegreeController {
     @Autowired
     private DegreeRepository degreeRepository;
 
+    @Autowired
+    private TeacherRepository teacherRepository;
+
     String notFound = "Degree not found on :: ";
 
     //Get all degrees
@@ -27,13 +33,6 @@ public class DegreeController {
         return degreeRepository.findAll();
     }
 
-    /**
-     * Gets degrees by id.
-     *
-     * @param degreeId the degree id
-     * @return the degree by id
-     * @throws ResourceNotFoundException the resource not found exception
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Degree> getDegreesById(@PathVariable(value = "id") Long degreeId)
             throws ResourceNotFoundException {
@@ -50,12 +49,6 @@ public class DegreeController {
         return degreeRepository.save(degree);
     }
 
-    /**
-     * Update degree entity
-     * @param degreeId the degree id
-     * @return the response entity
-     * @throws ResourceNotFoundException the resource not found exception
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Degree> updateDegree(
             @PathVariable(value = "id") Long degreeId, @Validated @RequestBody Degree degree)
@@ -63,20 +56,24 @@ public class DegreeController {
         Degree degree1 = degreeRepository.findById(degreeId)
                 .orElseThrow(() -> new ResourceNotFoundException(notFound + degreeId));
 
-        degree1.setTeacherId(degree.getTeacherId());
-        degree1.setStudentId(degree.getStudentId());
-        degree1.setSubjectId(degree.getSubjectId());
         degree1.setNameDegree(degree.getNameDegree());
         final Degree updateDegree = degreeRepository.save(degree1);
         return ResponseEntity.ok(updateDegree);
     }
 
-    /**
-     * Delete degree map.
-     *
-     * @param degreeId the degree id
-     * @return the map
-     */
+    @PutMapping("/{degreeId}/teacher/{teacherId}")
+    public ResponseEntity<Degree> addDegreeToTeacher(
+            @PathVariable Long degreeId,
+            @PathVariable Long teacherId
+    ){
+        Degree degree = degreeRepository.findById(degreeId).get();
+        Teacher teacher = teacherRepository.findById(teacherId).get();
+        degree.setTeacher(teacher);
+
+        final Degree updateDegree = degreeRepository.save(degree);
+        return ResponseEntity.ok(updateDegree);
+    }
+
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteDegree(@PathVariable(value = "id") Long degreeId) throws Exception {
         Degree degree =

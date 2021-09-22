@@ -2,16 +2,19 @@ package com.kodigo.mvc_srn.models;
 
 import lombok.*;
 
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "Subject")
 @Table
-@Getter
-@Setter
 @Builder
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Subject {
+
     @Id
     @SequenceGenerator(
             name = "subject_sequence",
@@ -20,17 +23,26 @@ public class Subject {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_sequence")
     @Column(updatable = false, nullable = false)
-    private long idSubject;
+    private long id;
 
-    @Column(name = "teacher_id", nullable = false)
-    private long teacherId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private Teacher teacher;
 
-    @Column(name = "student_id", nullable = false)
-    private long studentId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "note_id", referencedColumnName = "id")
+    private Note note;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "student_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    public Set<Student> enrolledStudents = new HashSet<>();
 
     @Column(name = "subject_name", nullable = false)
     private String nameSubject;
 
-    @Column(name = "subject_date", nullable = false)
-    private String nameDate;
 }
