@@ -3,7 +3,6 @@ package com.kodigo.mvc_srn.controllers;
 import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Degree;
 import com.kodigo.mvc_srn.models.Teacher;
-import com.kodigo.mvc_srn.models.Degree;
 import com.kodigo.mvc_srn.repository.DegreeRepository;
 import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/degree")
-public class DegreeController {
+public class DegreeController extends BaseController<Degree>{
     @Autowired
     private DegreeRepository degreeRepository;
 
@@ -26,28 +21,6 @@ public class DegreeController {
     private TeacherRepository teacherRepository;
 
     String notFound = "Degree not found on :: ";
-
-    //Get all degrees
-    @GetMapping("/all")
-    public List<Degree> getAllDegrees() {
-        return degreeRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Degree> getDegreesById(@PathVariable(value = "id") Long degreeId)
-            throws ResourceNotFoundException {
-        Degree degree =
-                degreeRepository
-                        .findById(degreeId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + degreeId));
-        return ResponseEntity.ok().body(degree);
-    }
-
-    //Post new degrees
-    @PostMapping("/")
-    public Degree createDegree(@Validated @RequestBody Degree degree){
-        return degreeRepository.save(degree);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Degree> updateDegree(
@@ -74,16 +47,4 @@ public class DegreeController {
         return ResponseEntity.ok(updateDegree);
     }
 
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteDegree(@PathVariable(value = "id") Long degreeId) throws Exception {
-        Degree degree =
-                degreeRepository
-                        .findById(degreeId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + degreeId));
-
-        degreeRepository.delete(degree);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }

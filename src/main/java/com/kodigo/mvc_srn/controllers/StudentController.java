@@ -3,7 +3,6 @@ package com.kodigo.mvc_srn.controllers;
 import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Degree;
 import com.kodigo.mvc_srn.models.Student;
-import com.kodigo.mvc_srn.models.Student;
 import com.kodigo.mvc_srn.models.Institute;
 import com.kodigo.mvc_srn.repository.DegreeRepository;
 import com.kodigo.mvc_srn.repository.InstituteRepository;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/student")
-public class StudentController {
+public class StudentController extends BaseController<Student>{
     @Autowired
     private StudentRepository studentRepository;
 
@@ -31,35 +30,6 @@ public class StudentController {
     private DegreeRepository degreeRepository;
 
     String notFound = "Student not found on :: ";
-
-    //Get all students
-    @GetMapping("/all")
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
-    }
-
-    /**
-     * Gets students by id.
-     *
-     * @param studentId the student id
-     * @return the student by id
-     * @throws ResourceNotFoundException the resource not found exception
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentsById(@PathVariable(value = "id") Long studentId)
-            throws ResourceNotFoundException {
-        Student student =
-                studentRepository
-                        .findById(studentId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + studentId));
-        return ResponseEntity.ok().body(student);
-    }
-
-    //Post new students
-    @PostMapping("/")
-    public Student createStudent(@Validated @RequestBody Student student){
-        return studentRepository.save(student);
-    }
 
     /**
      * Update student entity
@@ -105,22 +75,4 @@ public class StudentController {
         return ResponseEntity.ok(updateStudent);
     }
 
-    /**
-     * Delete student map.
-     *
-     * @param studentId the student id
-     * @return the map
-     */
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteStudent(@PathVariable(value = "id") Long studentId) throws Exception {
-        Student student =
-                studentRepository
-                        .findById(studentId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + studentId));
-
-        studentRepository.delete(student);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }

@@ -4,6 +4,7 @@ import com.kodigo.mvc_srn.exception.ResourceNotFoundException;
 import com.kodigo.mvc_srn.models.Institute;
 import com.kodigo.mvc_srn.repository.InstituteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,40 +16,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/institute")
-public class InstituteController {
+public class InstituteController extends BaseController<Institute>{
     @Autowired
     private InstituteRepository instituteRepository;
 
     String notFound = "Institute not found on :: ";
-
-    //Get all institutes
-    @GetMapping("/all")
-    public List<Institute> getAllInstitutes() {
-        return instituteRepository.findAll();
-    }
-
-    /**
-     * Gets institutes by id.
-     *
-     * @param instituteId the institute id
-     * @return the institute by id
-     * @throws ResourceNotFoundException the resource not found exception
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<Institute> getInstitutesById(@PathVariable(value = "id") Long instituteId)
-            throws ResourceNotFoundException {
-        Institute institute =
-                instituteRepository
-                        .findById(instituteId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + instituteId));
-        return ResponseEntity.ok().body(institute);
-    }
-
-    //Post new institutes
-    @PostMapping("/")
-    public Institute createInstitute(@Validated @RequestBody Institute institute){
-        return instituteRepository.save(institute);
-    }
 
     /**
      * Update institute entity
@@ -68,22 +40,4 @@ public class InstituteController {
         return ResponseEntity.ok(updateInstitute);
     }
 
-    /**
-     * Delete institute map.
-     *
-     * @param instituteId the institute id
-     * @return the map
-     */
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteInstitute(@PathVariable(value = "id") Long instituteId) throws Exception {
-        Institute institute =
-                instituteRepository
-                        .findById(instituteId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + instituteId));
-
-        instituteRepository.delete(institute);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }

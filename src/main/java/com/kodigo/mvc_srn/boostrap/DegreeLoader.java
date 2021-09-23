@@ -22,17 +22,17 @@ public class DegreeLoader implements CommandLineRunner {
         if (degreeRepository.count() == 0) {
             degreeRepository.save(
                     Degree.builder()
-                            .nameDegree("Mathematics")
+                            .nameDegree("Primer Grado")
                             .build()
             );
             degreeRepository.save(
                     Degree.builder()
-                            .nameDegree("Sociales")
+                            .nameDegree("Segundo Grado")
                             .build()
             );
             degreeRepository.save(
                     Degree.builder()
-                            .nameDegree("Ciencias")
+                            .nameDegree("Tercer Grado")
                             .build()
             );
             System.out.println("Ejemplos Degrees cargados");

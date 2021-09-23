@@ -9,17 +9,11 @@ import com.kodigo.mvc_srn.repository.SubjectRepository;
 import com.kodigo.mvc_srn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/subject")
-public class SubjectController {
+public class SubjectController extends BaseController<Subject>{
     @Autowired
     private SubjectRepository subjectRepository;
 
@@ -33,28 +27,6 @@ public class SubjectController {
     private NoteRepository noteRepository;
 
     String notFound = "Subject not found on :: ";
-
-    //Get all subjects
-    @GetMapping("/all")
-    public List<Subject> getAllSubjects() {
-        return subjectRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Subject> getSubjectsById(@PathVariable(value = "id") Long subjectId)
-            throws ResourceNotFoundException {
-        Subject subject =
-                subjectRepository
-                        .findById(subjectId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
-        return ResponseEntity.ok().body(subject);
-    }
-
-    //Post new subjects
-    @PostMapping("/")
-    public Subject createSubject(@RequestBody Subject subject){
-        return subjectRepository.save(subject);
-    }
 
     @PutMapping("/{subjectId}/students/{studentId}")
     public ResponseEntity<Subject> addStudentToSubject(
@@ -103,16 +75,4 @@ public class SubjectController {
         return ResponseEntity.ok(updateSubject);
     }
 
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteSubject(@PathVariable(value = "id") Long subjectId) throws Exception {
-        Subject subject =
-                subjectRepository
-                        .findById(subjectId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + subjectId));
-
-        subjectRepository.delete(subject);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }

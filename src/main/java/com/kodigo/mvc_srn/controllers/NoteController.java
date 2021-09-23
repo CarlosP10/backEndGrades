@@ -15,40 +15,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/note")
-public class NoteController {
+public class NoteController extends BaseController<Note>{
     @Autowired
     private NoteRepository noteRepository;
 
     String notFound = "Note not found on :: ";
-
-    //Get all notes
-    @GetMapping("/all")
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
-    }
-
-    /**
-     * Gets notes by id.
-     *
-     * @param noteId the note id
-     * @return the note by id
-     * @throws ResourceNotFoundException the resource not found exception
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<Note> getNotesById(@PathVariable(value = "id") Long noteId)
-            throws ResourceNotFoundException {
-        Note note =
-                noteRepository
-                        .findById(noteId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + noteId));
-        return ResponseEntity.ok().body(note);
-    }
-
-    //Post new notes
-    @PostMapping("/")
-    public Note createNote(@Validated @RequestBody Note note){
-        return noteRepository.save(note);
-    }
 
     /**
      * Update note entity
@@ -69,22 +40,4 @@ public class NoteController {
         return ResponseEntity.ok(updateNote);
     }
 
-    /**
-     * Delete note map.
-     *
-     * @param noteId the note id
-     * @return the map
-     */
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteNote(@PathVariable(value = "id") Long noteId) throws Exception {
-        Note note =
-                noteRepository
-                        .findById(noteId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + noteId));
-
-        noteRepository.delete(note);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }

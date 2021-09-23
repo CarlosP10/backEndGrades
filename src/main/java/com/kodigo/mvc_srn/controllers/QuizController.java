@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/quiz")
-public class QuizController {
+public class QuizController extends BaseController<Quiz>{
     @Autowired
     private QuizRepository quizRepository;
 
@@ -27,28 +27,6 @@ public class QuizController {
     @Autowired
     private NoteRepository noteRepository;
     String notFound = "Quiz not found on :: ";
-
-    //Get all quizs
-    @GetMapping("/all")
-    public List<Quiz> getAllQuizs() {
-        return quizRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Quiz> getQuizsById(@PathVariable(value = "id") Long quizId)
-            throws ResourceNotFoundException {
-        Quiz quiz =
-                quizRepository
-                        .findById(quizId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + quizId));
-        return ResponseEntity.ok().body(quiz);
-    }
-
-    //Post new quizs
-    @PostMapping("/")
-    public Quiz createQuiz(@RequestBody Quiz quiz){
-        return quizRepository.save(quiz);
-    }
 
     @PutMapping("/{quizId}/students/{studentId}")
     public ResponseEntity<Quiz> addStudentToQuiz(
@@ -87,16 +65,4 @@ public class QuizController {
         return ResponseEntity.ok(updateQuiz);
     }
 
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteQuiz(@PathVariable(value = "id") Long quizId) throws Exception {
-        Quiz quiz =
-                quizRepository
-                        .findById(quizId)
-                        .orElseThrow(() -> new ResourceNotFoundException(notFound + quizId));
-
-        quizRepository.delete(quiz);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
 }
