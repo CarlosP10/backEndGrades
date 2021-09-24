@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Note")
@@ -31,10 +33,10 @@ public class Note {
     @Column(name = "note_name", nullable = false)
     private String noteName;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "note")
     private Set<Quiz> quizzes;
 
     @Column(name = "note", nullable = false)
     private double noteDouble;
+
 }

@@ -60,6 +60,7 @@ public class QuizController extends BaseController<Quiz>{
     ){
         Quiz quiz = quizRepository.findById(quizId).get();
         Note note = noteRepository.findById(noteId).get();
+        note.setNoteDouble();
         quiz.setNote(note);
 
         final Quiz updateQuiz = quizRepository.save(quiz);
