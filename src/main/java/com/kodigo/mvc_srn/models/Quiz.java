@@ -1,5 +1,6 @@
 package com.kodigo.mvc_srn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,10 +25,12 @@ public class Quiz {
     @Column(updatable = false, nullable = false)
     private long id;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "note_id", referencedColumnName = "id")
     private Note note;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "student_quiz",

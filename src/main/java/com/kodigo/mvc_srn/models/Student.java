@@ -37,7 +37,7 @@ public class Student {
     @ManyToMany(mappedBy = "enrolledStudents")
     private Set<Subject> subjects = new HashSet<>();
 
-    @JsonIgnore
+
     @ManyToMany(mappedBy = "enrolledStudentsQuiz")
     private Set<Quiz> quizzes = new HashSet<>();
 

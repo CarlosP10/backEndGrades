@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST, RequestMethod.PUT})
 @RequestMapping("/api/v1/quiz")
 public class QuizController extends BaseController<Quiz>{
     @Autowired
